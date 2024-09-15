@@ -1,9 +1,12 @@
 from flask import Blueprint, request
 from ast import literal_eval
+import math
+import time
 
 tasker_bp = Blueprint("tasker",__name__, url_prefix="/tasker")
 
 TASK_TYPES = {"sum": 2, "multiply": 3}
+TASK_FUNC = {"sum": sum, "multiply": math.prod}
 
 def get_json_task():
     try:
@@ -17,7 +20,6 @@ def get_json_task():
 def get_json_params(task):
     try:
         params = literal_eval(request.json["params"])
-        # params = request.json["params"]
     except KeyError:
         return {"error": "no params provided"}
     except ValueError:
@@ -39,6 +41,13 @@ def do_task():
     if "error" in params:
         return params, 400
 
+    func = TASK_FUNC[task]
+    result = func(params)
+    req_ip = request.environ.get('REMOTE_ADDR')
+    time_stamp = str(time.time())
+    params = request.json["params"]
+    print(f"func: {task} - result: {result} - req_ip {req_ip} - time {time_stamp} - params {params
+    }")
 
     return "ok"
 
