@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from ast import literal_eval
 import math
 import time
+from .models import db, Tasker
 
 tasker_bp = Blueprint("tasker",__name__, url_prefix="/tasker")
 
@@ -43,13 +44,15 @@ def do_task():
 
     func = TASK_FUNC[task]
     result = func(params)
-    req_ip = request.environ.get('REMOTE_ADDR')
+    req_ip = request.environ.get("REMOTE_ADDR")
     time_stamp = str(time.time())
     params = request.json["params"]
-    print(f"func: {task} - result: {result} - req_ip {req_ip} - time {time_stamp} - params {params
-    }")
 
-    return "ok"
+    new_task = Tasker(task=task, params=params, result=result, req_ip=req_ip, time_stamp=time_stamp)
+    db.session.add(new_task)
+    db.session.commit()
+
+    return {"uuid": f"{new_task.uuid}"}
 
 @tasker_bp.route("/")
 def show_tasks():
