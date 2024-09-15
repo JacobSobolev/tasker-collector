@@ -14,3 +14,13 @@ class Tasker(db.Model):
     result = db.Column(db.String)
     req_ip = db.Column(db.String)
     time_stamp = db.Column(db.String)
+
+    def get_dict(self):
+        return {
+            "uuid": self.uuid,
+            "task": self.task,
+            "params": self.params,
+            "result": self.result,
+            "req_ip": self.req_ip,
+            "time_stamp": self.time_stamp
+        }

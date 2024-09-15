@@ -56,4 +56,6 @@ def do_task():
 
 @tasker_bp.route("/")
 def show_tasks():
-    return "all the tasks"
+    tasks_q = Tasker.query.all()
+    tasks_list = [task.get_dict() for task in tasks_q]
+    return tasks_list
