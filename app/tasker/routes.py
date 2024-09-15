@@ -44,7 +44,10 @@ def do_task():
 
     func = TASK_FUNC[task]
     result = func(params)
-    req_ip = request.environ.get("REMOTE_ADDR")
+    if request.environ.get('HTTP_X_FORWARDED_FOR') is None:
+        req_ip = request.environ['REMOTE_ADDR']
+    else:
+        req_ip = request.environ['HTTP_X_FORWARDED_FOR']
     time_stamp = str(time.time())
     params = request.json["params"]
 
