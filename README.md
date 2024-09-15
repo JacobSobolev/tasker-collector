@@ -54,7 +54,8 @@ source venv/bin/activate (if you are on mac\linux)
 ```
 pip install -r requirements.txt
 ```
-4. run the flask app
+4.  in the app/__ init __.py file uncomment line 10 and comment line 11
+5. run the flask app
 ```
 flask --app run run --debug  
 ```
